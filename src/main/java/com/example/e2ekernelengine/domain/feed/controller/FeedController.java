@@ -9,6 +9,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,6 +45,19 @@ public class FeedController {
 
 		Page<FeedPageableResponse> feedList = feedService.findRecentFeedList(pageable);
 		return ResponseEntity.ok(feedList);
+	}
+
+	@GetMapping("/clicked")
+	public ResponseEntity<Page<FeedPageableResponse>> findMostClickedFeedList(
+			@PageableDefault(size = 5, sort = "visitCount", direction = Sort.Direction.DESC) Pageable pageable) {
+
+		Page<FeedPageableResponse> feedList = feedService.findMostClickedFeedList(pageable);
+		return ResponseEntity.ok(feedList);
+	}
+
+	@PostMapping("/visit/{feedId}")
+	public void updateDailyVisitCount(@PathVariable Long feedId) {
+		feedService.increaseDailyVisitCount(feedId);
 	}
 
 }
