@@ -5,7 +5,7 @@ DEPLOY_PATH="/home/ubuntu/${PROJECT_NAME}"
 DEPLOY_LOG_PATH="/home/ubuntu/${PROJECT_NAME}/deploy.log"
 DEPLOY_ERR_LOG_PATH="/home/ubuntu/${PROJECT_NAME}/deploy_err.log"
 APPLICATION_LOG_PATH="/home/ubuntu/${PROJECT_NAME}/application.log"
-BUILD_JAR=$(ls $JAR_PATH | grep 'SNAPSHOT.jar' | tail -n 1)
+BUILD_JAR=$(ls $JAR_PATH | grep '.jar' | tail -n 1)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
