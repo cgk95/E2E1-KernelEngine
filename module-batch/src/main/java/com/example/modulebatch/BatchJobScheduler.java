@@ -44,8 +44,8 @@ public class BatchJobScheduler {
 		}
 	}
 
-	// @Scheduled(initialDelay = 0, fixedRate = 600000000)
-	@Scheduled(cron = "0 0 3 * * ?")
+	@Scheduled(initialDelay = 300000, fixedRate = 60000000)
+	// @Scheduled(cron = "0 0 3 * * ?")
 	public void runAddFeedFromDataLoaderJob() {
 		Map<String, JobParameter> confMap = new HashMap<>();
 		confMap.put("time", new JobParameter(System.currentTimeMillis()));
