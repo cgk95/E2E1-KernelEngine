@@ -1,0 +1,1 @@
+web : java -jar e2e-kernel-engine-0.0.1-SNAPSHOT.jar
