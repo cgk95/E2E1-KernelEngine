@@ -39,9 +39,8 @@ jobs:
         run: ./gradlew build
         shell: bash
 
-      - name: Make zip file
-        run: zip -r ./$GITHUB_SHA .
-        shell: bash
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -52,4 +51,4 @@ jobs:
           environment_name: ${{secrets.AWS_EB_ENVIRONMENT_NAME}}
           version_label: 12345
           region: ${{secrets.AWS_REGION}}
-          deployment_package: $GITHUB_SHA.zip
+          deployment_package: deploy.zip
