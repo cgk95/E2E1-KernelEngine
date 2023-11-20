@@ -5,10 +5,6 @@ on:
     branches:
       - feat/#94
 
-env:
-  S3_BUCKET_NAME: s3-kernelengine
-  CODE_DEPLOY_APPLICATION_NAME: KernelEngine
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: Code-Deploy-KernelEngine
 
 jobs:
   build:
@@ -16,15 +12,26 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
 
-      - name: Gradle execute permission for gradlew
+      - name: Grant Gradle execute permission for gradlew
         run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current_time
+        with:
+          format: 'YYYY-MM-DD-HH-mm-ss'
+          utcOffset: '+09:00'
+
+      - name: Show Current time
+        run: echo "${{ steps.current_time.outputs.time }}"
         shell: bash
 
       - name: Build with Gradle
@@ -35,20 +42,13 @@ jobs:
         run: zip -r ./$GITHUB_SHA .
         shell: bash
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          aws-region: ${{secrets.AWS_REGION}}
-
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
-
-      - name: Code Deploy
-        run: |
-          aws deploy create-deployment \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name ${{env.CODE_DEPLOY_APPLICATION_NAME}} \
-          --deployment-group-name ${{env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME}} \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ${{secrets.AWS_EB_APPLICATION_NAME}}
+          environment_name: ${{secrets.AWS_EB_ENVIRONMENT_NAME}}
+          version_label: 12345
+          region: ${{secrets.AWS_REGION}}
+          deployment_package: $GITHUB_SHA.zip
