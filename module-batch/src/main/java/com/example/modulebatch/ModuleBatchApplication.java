@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+// @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableBatchProcessing
 @EnableScheduling
 @ComponentScan({"com.example.e2ekernelengine", "com.example.modulebatch"})
