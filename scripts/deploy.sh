@@ -2,10 +2,17 @@
 
 source ./var.sh
 echo "===== $MYSQL_DATABASE_URL ====="
-REPOSITORY=/home/ubuntu/E2E1-KernelEngine #/Users/chan99/IdeaProjects/E2E1-KernelEngine
+REPOSITORY=/Users/chan99/IdeaProjects/E2E1-KernelEngine #/home/ubuntu/E2E1-KernelEngine
 JAR_REPOSITORY=$REPOSITORY/build/libs
 BATCH_JAR_REPOSITORY=$REPOSITORY/module-batch/build/libs/
-
+#DOCKER_REPOSITORY=/Users/chan99/IdeaProjects/E2E1-KernelEngine/src/main/resources/elasticsearch/docker #/home/ubuntu/E2E1-KernelEngine/src/main/resources/elasticsearch/docker
+#
+#echo "===== Down Previous Docker ====="
+#cd $DOCKER_REPOSITORY
+#sudo docker-compose down
+#
+#echo "===== Up Docker compose ====="
+#sudo docker-compose up --build -d
 
 echo "======= Move to REPOSITORY ======"
 cd $REPOSITORY
