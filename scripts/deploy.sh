@@ -1,4 +1,6 @@
 #!/bin/bash
+
+source ./var.sh
 REPOSITORY=/Users/chan99/IdeaProjects/E2E1-KernelEngine
 JAR_REPOSITORY=$REPOSITORY/build/libs
 BATCH_JAR_REPOSITORY=$REPOSITORY/module-batch/build/libs/
@@ -41,9 +43,11 @@ chmod +x $JAR_REPOSITORY/$JAR_NAME
 chmod +x $BATCH_JAR_REPOSITORY/$BATCH_JAR_NAME
 
 echo "===== $JAR_NAME 실행 ====="
-nohup java -jar $JAR_REPOSITORY/$JAR_NAME 1>log.out 2>err.out &
+nohup java -jar -Dspring.config.location=$REPOSITORY/src/main/resources/application.yml \
+$JAR_REPOSITORY/$JAR_NAME 1>log.out 2>err.out &
 
 echo "===== $BATCH_JAR_NAME 실행 ====="
-nohup java -jar $BATCH_JAR_REPOSITORY/$BATCH_JAR_NAME 1>batch_log.out 2>batch_err.out &
+nohup java -jar -Dspring.config.location=$REPOSITORY/module-batch/src/main/resources/application.yml \
+$BATCH_JAR_REPOSITORY/$BATCH_JAR_NAME 1>batch_log.out 2>batch_err.out &
 
 
