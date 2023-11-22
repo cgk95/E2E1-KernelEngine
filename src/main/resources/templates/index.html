@@ -63,24 +63,29 @@
                            name="query" placeholder="검색어를 입력하세요" type="text">
                 </div>
             </form>
-            <div class="col-sm-2 offset-sm-10">
-                <div class="form-group">
-                    <label for="sort-option">정렬 기준</label>
-                    <select class="form-control" id="sort-option">
-                        <!--<select class="form-control" id="sort-option" onchange="redirectToFeedUrl('${feed.feedUrl}')">-->
-                        <option value="recent">최신순</option>
-                        <option value="clicked">조회순</option>
-                    </select>
-                </div>
-            </div>
+            <!--            <div class="col-sm-2 offset-sm-10">-->
+            <!--                <div class="form-group">-->
+            <!--                    <label for="sort-option">정렬 기준</label>-->
+            <!--                    <select class="form-control" id="sort-option">-->
+            <!--                        &lt;!&ndash;<select class="form-control" id="sort-option" onchange="redirectToFeedUrl('${feed.feedUrl}')">&ndash;&gt;-->
+            <!--                        <option value="recent">최신순</option>-->
+            <!--                        <option value="clicked">조회순</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--            </div>-->
         </div>
 
         <div class="container" id="feed-list-block">
             <form id="feed-list">
                 <div th:each="feed : ${feedPageableResponse}">
+                    <script th:inline="javascript">
+                        /* feed 객체 정보를 콘솔에 출력 */
+                        console.log([[${feed.feedUrl}]]);
+                    </script>
                     <div>
                         <form id="feed-box">
-                            <div class="row justify-content-md-center" onclick="redirectToFeedUrl('${feed.feedUrl}')">
+                            <div class="row justify-content-md-center"
+                                 onclick="redirectToFeedUrl('${feed.feedUrl}')">
                                 <div class="col-md-auto">
                                     <p id="feedId" style="display:none;">${feed.feedId}</p>
                                     <p id="feedUrl" style="display:none;">${feed.feedUrl}</p>
@@ -99,6 +104,7 @@
     </div>
 </main>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -129,29 +135,31 @@
             blogWriterName: ""
         };
 
-        const sortOption = document.getElementById("sort-option");
-        sortOption.addEventListener("change", function (event) {
-            event.preventDefault();
-            handleSortChange();
-        });
-
-        function handleSortChange() {
-            fetchFeedList();
-        }
+        // const sortOption = document.getElementById("sort-option");
+        // sortOption.addEventListener("change", function (event) {
+        //     event.preventDefault();
+        //     handleSortChange();
+        // });
+        //
+        // function handleSortChange() {
+        //     fetchFeedList();
+        // }
 
         function fetchFeedList() {
-            const sortOption = document.getElementById("sort-option").value;
             let url = `http://localhost:8080/api/v1/feeds`;
-
-            if (sortOption === "clicked") {
-                url = `http://localhost:8080/api/v1/feeds/most-clicked`;
-            }
+            // const sortOption = document.getElementById("sort-option").value;
+            // if (sortOption === "clicked") {
+            //     url = `http://localhost:8080/api/v1/feeds/most-clicked`;
+            // }
 
             fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                // cors 에러 해결을 위해 추가 (https://developer.mozilla.org/ko/docs/Web/API/Fetch_API/Using_Fetch)
+                mode: 'cors',
+                credentials: 'include',
             })
                 .then(response => {
                     if (!response.ok) {
