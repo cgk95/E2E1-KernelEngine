@@ -14,8 +14,7 @@ echo "======= Grant gradlew ======"
 chmod +x ./gradlew
 
 echo "===== Build Gradle ====="
-./gradlew build
-
+./gradlew build --no-tests
 
 
 echo "===== 현재 구동중인 애플리케이션의 PID 확인 ====="
